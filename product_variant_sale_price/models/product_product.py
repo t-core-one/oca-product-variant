@@ -13,10 +13,10 @@ class ProductTemplate(models.Model):
             self.mapped("product_variant_ids").write({"fix_price": vals["list_price"]})
 
     @api.model_create_multi
-    def create(self, vals):
-        records = super().create(vals)
+    def create(self, vals_list):
+        records = super().create(vals_list)
         for i, product_tmpl in enumerate(records):
-            single_vals = vals[i] if isinstance(vals, list) else vals
+            single_vals = vals_list[i] if i < len(vals_list) else {}
             product_tmpl._update_fix_price(single_vals)
         return records
 
